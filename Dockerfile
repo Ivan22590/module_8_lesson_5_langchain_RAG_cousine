@@ -12,8 +12,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Код приложения (секреты через env_file в docker-compose, не здесь)
-COPY config.py vectorstore.py tools.py agent.py bot.py main.py ./
+# Код приложения (секреты через env_file в docker-compose, не здесь).
+# Берём все *.py — чтобы переименование/добавление модулей не ломало сборку.
+COPY *.py ./
+
+# Проверка целостности кода на этапе сборки
+RUN python -m py_compile *.py && rm -rf __pycache__
 
 # Запуск от некорневого пользователя
 RUN useradd --create-home --shell /usr/sbin/nologin appuser && \

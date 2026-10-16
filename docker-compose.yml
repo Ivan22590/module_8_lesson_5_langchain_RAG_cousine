@@ -2,7 +2,12 @@ services:
   bot:
     build: .
     container_name: rag-telegram-bot
-    env_file: .env
+    # .env локально обязателен, а на сервере Coolify может генерировать свой —
+    # делаем файл необязательным, чтобы деплой не падал (переменные
+    # контейнер получает из окружения/сгенерированного .env).
+    env_file:
+      - path: .env
+        required: false
     restart: unless-stopped
     logging:
       driver: json-file
