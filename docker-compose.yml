@@ -1,0 +1,11 @@
+services:
+  bot:
+    build: .
+    container_name: rag-telegram-bot
+    env_file: .env
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
